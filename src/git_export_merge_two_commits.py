@@ -23,13 +23,13 @@ JSON：``--config`` / ``--config=PATH`` 或环境变量 ``GIT_EXPORT_MERGE_CONFI
 
 依赖：Python 3.9+、本机 ``git`` 命令。
 
-示例（在项目根目录执行）::
+示例（在仓库根目录执行）::
 
     python3 src/git_export_merge_two_commits.py \\
-        --repo . --commit REV1 --commit REV2 --commit REV3 -o ./dist/export
+        --repo /path/to/repo --commit REV1 --commit REV2 --commit REV3 -o ./dist/export
 
     python3 src/git_export_merge_two_commits.py \\
-        --config examples/git_export_merge.config.example.json
+        --config ./config.example.json
 """
 
 from __future__ import annotations

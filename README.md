@@ -6,15 +6,14 @@
 
 ```
 git-export-merge/
-├── README.md                 # 本文件
+├── README.md
+├── config.example.json       # 配置文件示例（复制后修改）
 ├── docs/
-│   └── 设计说明.md           # 目标、语义、配置优先级与实现要点
+│   └── 设计说明.md
 ├── src/
 │   └── git_export_merge_two_commits.py
-├── examples/
-│   └── git_export_merge.config.example.json
 └── tests/
-    └── test_smoke.py         # 冒烟测试（临时仓库 + dry-run / 实导出）
+    └── test_smoke.py
 ```
 
 ## 环境要求
@@ -24,15 +23,17 @@ git-export-merge/
 
 ## 快速开始
 
-```bash
-cd /Users/Licw/Desktop/git/git-export-merge
+克隆本仓库后，**进入仓库根目录**（即包含 `README.md` 与 `src` 的目录）：
 
-# 查看帮助
+```bash
+git clone https://github.com/lcw918110/git-export-merge.git
+cd git-export-merge
+
 python3 src/git_export_merge_two_commits.py --help
 
-# 干跑（不写盘）
+# 干跑（不写盘）：将下面 /path/to/repo 换成你要分析的真实仓库路径
 python3 src/git_export_merge_two_commits.py \
-  --repo /path/to/your/repo \
+  --repo /path/to/repo \
   --commit REV1 --commit REV2 \
   -o /path/to/export-dir \
   --dry-run
@@ -40,21 +41,36 @@ python3 src/git_export_merge_two_commits.py \
 
 ## 配置文件
 
-复制 `examples/git_export_merge.config.example.json` 并按需修改。相对路径 `repo`、`output` 相对于**配置文件所在目录**解析。
+本仓库根目录提供 **`config.example.json`**，请复制为例如 `git_export_merge.config.json`（文件名自定），再修改其中字段：
 
-命令行一旦显式传入某参数，即覆盖配置文件中的同名字段。
+| 字段 | 说明 |
+|------|------|
+| `repo` | 要导出的 **Git 仓库根路径**（相对路径相对于**配置文件所在目录**，也可用绝对路径） |
+| `commits` | 参与比较的提交 rev 列表（字符串数组），顺序见 `docs/设计说明.md` |
+| `output` | 导出目标目录（相对路径同样相对配置文件所在目录） |
+| `tag_min_len` / `tag_max_len` | 冲突文件名中提交哈希前缀长度范围 |
+| `dry_run` | `true` 时只统计不写盘 |
+| 其余 | 见示例文件内注释与 `python3 src/... --help` |
 
-也可通过环境变量 `GIT_EXPORT_MERGE_CONFIG` 指定默认配置文件路径。
+使用配置文件运行：
+
+```bash
+python3 src/git_export_merge_two_commits.py --config ./git_export_merge.config.json
+```
+
+也可通过环境变量 **`GIT_EXPORT_MERGE_CONFIG`** 指向你的配置文件路径，省去每次写 `--config`。
+
+**优先级**：命令行里**显式写出**的参数会覆盖配置文件中的同名字段。
 
 ## 测试
 
-在项目根目录执行：
+在仓库根目录执行：
 
 ```bash
 python3 tests/test_smoke.py
 ```
 
-测试会创建临时 Git 仓库（两次提交修改同一文件），验证脚本的 `--dry-run` 与实导出、冲突拆分行为。
+测试会创建临时 Git 仓库（两次提交修改同一文件），验证 `--dry-run` 与实导出、冲突拆分行为。
 
 ## 设计文档
 

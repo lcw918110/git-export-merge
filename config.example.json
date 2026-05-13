@@ -1,0 +1,18 @@
+{
+  "_comment": "示例配置：复制为 git_export_merge.config.json（或任意路径）后按需修改。字段说明见 README「配置文件」。相对路径 repo、output 均以本配置文件所在目录为基准解析。",
+  "repo": "../你的目标仓库",
+  "commits": [
+    "HEAD~1",
+    "HEAD"
+  ],
+  "output": "./export-output",
+  "tag_min_len": 7,
+  "tag_max_len": 12,
+  "manifest": "_导出说明",
+  "no_json_manifest": false,
+  "dry_run": true,
+  "skip_non_blob": false,
+  "progress_every": 5000,
+  "verbose": 0,
+  "quiet": false
+}
