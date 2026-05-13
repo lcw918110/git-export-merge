@@ -14,12 +14,11 @@ r"""
 
 因此：**不再需要** ``commit_first`` / ``commit_second`` 两套概念，**一个有序列表即可**（顺序只影响「同一 oid 首次出现」用于打标签时的选取，不影响是否冲突）。
 
-配置
-----
-JSON：``--config`` / ``--config=PATH`` 或环境变量 ``GIT_EXPORT_MERGE_CONFIG``。
-命令行显式出现的参数覆盖配置文件。兼容旧键：若未提供 ``commits``，则可用
-``commit_first``（字符串或数组）+ ``commit_second``（字符串）自动拼成列表
-``[...commit_first..., commit_second]``。
+配置与兼容
+----------
+- JSON：``--config`` / ``--config=PATH`` 或环境变量 ``GIT_EXPORT_MERGE_CONFIG``；命令行显式项覆盖文件。
+- 主字段为 ``commits``（数组）。若未提供 ``commits``，可读旧键 ``commit_first`` + ``commit_second`` 拼成列表（**过渡**）；详见 ``docs/设计说明.md`` 第五节。
+- 命令行旧参数 ``--commit-first`` / ``--commit-second`` 仍可用但会弃用警告，请改用 ``--commit``。
 
 依赖：Python 3.9+、本机 ``git`` 命令。
 
