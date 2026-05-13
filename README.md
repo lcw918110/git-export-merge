@@ -41,16 +41,24 @@ python3 src/git_export_merge_two_commits.py \
 
 ## 配置文件
 
-本仓库根目录提供 **`config.example.json`**，请复制为例如 `git_export_merge.config.json`（文件名自定），再修改其中字段：
+本仓库根目录提供 **`config.example.json`**（内含 **`_字段说明`** 中文释义，以及以 `_` 开头的旁注键；旁注不参与解析）。请复制为例如 `git_export_merge.config.json` 后按需修改。
 
-| 字段 | 说明 |
-|------|------|
-| `repo` | 要导出的 **Git 仓库根路径**（相对路径相对于**配置文件所在目录**，也可用绝对路径） |
-| `commits` | 参与比较的提交 rev 列表（字符串数组），顺序见 `docs/设计说明.md` |
-| `output` | 导出目标目录（相对路径同样相对配置文件所在目录） |
-| `tag_min_len` / `tag_max_len` | 冲突文件名中提交哈希前缀长度范围 |
-| `dry_run` | `true` 时只统计不写盘 |
-| 其余 | 见示例文件内注释与 `python3 src/... --help` |
+**与程序一致的字段一览**（更细的命令行对照见 `docs/设计说明.md` **4.3 节**）：
+
+| 配置键 | 说明 |
+|--------|------|
+| `repo` | 目标 Git 工作区根；相对路径相对**配置文件所在目录**；未配置且命令行也未指定 `--repo` 时，程序使用**当前工作目录** |
+| `commits` | 提交 rev 的 JSON 数组，与多次 `--commit` 等价 |
+| `output` | 导出根目录；非 dry-run 时若已存在会先删除 |
+| `tag_min_len` / `tag_max_len` | 冲突文件名中哈希前缀长度范围（默认 7～12） |
+| `manifest` | 导出说明文件主名（生成 `.txt` 与可选 `.json`） |
+| `no_json_manifest` | `true` 则只写 `.txt` |
+| `dry_run` | `true` 只统计不写盘 |
+| `skip_non_blob` | `true` 跳过非 blob（如 submodule） |
+| `progress_every` | 每写多少个文件打一条进度日志，`0` 关闭 |
+| `verbose` / `quiet` | 日志级别，与 `-v` / `-q` 对应（详见设计说明 4.3） |
+| `commit_first` / `commit_second` | **过渡**，仅当无 `commits` 时拼接；建议改为 `commits` |
+| `hash_prefix_len` | **过渡**，映射为 `tag_min_len` |
 
 使用配置文件运行：
 

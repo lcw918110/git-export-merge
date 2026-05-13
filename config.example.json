@@ -1,5 +1,24 @@
 {
-  "_comment": "示例配置：复制为 git_export_merge.config.json（或任意路径）后按需修改。字段说明见 README「配置文件」。相对路径 repo、output 均以本配置文件所在目录为基准解析。",
+  "_说明_阅读顺序": "先读下面「_字段说明」，再改实际字段。凡以单下划线 _ 开头的键仅作文档/注释，程序不会当作参数读取（也不会写入导出目录内的 manifest 的 config_keys 列表）。",
+
+  "_字段说明": {
+    "repo": "要分析的 Git 工作区根路径。可为绝对路径，或与「本配置文件所在目录」相对的相对路径。未在配置里写时，命令行可用 --repo；都不写则默认当前工作目录（一般应显式指定）。",
+    "commits": "参与导出的提交 rev 列表（字符串数组）。顺序影响：同一 oid 在多个提交中出现时，用「列表中首次出现该 oid 的提交」生成冲突文件名里的哈希标签。与命令行多次 --commit 等价。",
+    "output": "导出根目录。若已存在且非 dry_run，会先整目录删除再写入。不得位于目标 repo 根或其 .git 下。相对路径相对于本配置文件所在目录。",
+    "tag_min_len": "冲突文件名中嵌入的提交哈希前缀最短位数（整数，默认 7）。与 tag_max_len 共同限制自动加长范围。",
+    "tag_max_len": "冲突文件名中哈希前缀最长位数（整数，默认 12）。仍碰撞时会用完整 40 位或加后缀。不得小于 tag_min_len。",
+    "manifest": "导出完成后，在 output 根下生成的说明文件主名（不含扩展名）；会生成 .txt，且除非 no_json_manifest 为 true 还会生成 .json。",
+    "no_json_manifest": "为 true 时只写说明 .txt，不写 .json。",
+    "dry_run": "为 true 时只解析树并打印统计，不写 output、不删除已有 output。",
+    "skip_non_blob": "为 true 时跳过 submodule（gitlink）等非 blob 路径并记入说明；默认 false（遇到非 blob 会报错退出）。",
+    "progress_every": "每写出多少个文件打一条 INFO 日志；0 表示关闭进度日志。",
+    "verbose": "日志详细度：0 默认 INFO；1 仍为 INFO；2 为 DEBUG。与命令行 -v 重复次数对应。",
+    "quiet": "为 true 时仅 WARNING 及以上，压制 INFO。与命令行 -q 一致。若与 verbose 同时配置，以程序内 argparse 解析顺序为准（建议勿同时设为矛盾）。",
+    "commit_first": "【过渡】仅当未提供 commits 时使用：字符串或字符串数组，会与 commit_second 拼成列表。新配置请改用 commits。",
+    "commit_second": "【过渡】仅当未提供 commits 时使用：字符串，拼在 commit_first 之后。",
+    "hash_prefix_len": "【过渡】等价于仅设置 tag_min_len（当未单独写 tag_min_len 时）。请逐步改为 tag_min_len。"
+  },
+
   "repo": "../你的目标仓库",
   "commits": [
     "HEAD~1",

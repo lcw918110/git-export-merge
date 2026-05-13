@@ -402,6 +402,7 @@ def extract_config_path(argv: Sequence[str]) -> Path | None:
 
 
 def load_json_config(path: Path) -> dict[str, Any]:
+    """读取 JSON 配置。顶层键若以 ``_`` 开头，仅作文档旁注；``config_defaults_for_parser`` 不读取，导出 manifest 的 ``config_keys`` 也不列出。"""
     if not path.is_file():
         raise ExportMergeError(f"配置文件不存在: {path}")
     try:
@@ -680,7 +681,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--verbose",
         action="count",
         default=0,
-        help="提高日志级别（-v INFO, -vv DEBUG）",
+        help="提高日志详细度：默认已为 INFO；重复 -v 时第二次起为 DEBUG（与 configure_logging 一致）",
     )
     p.add_argument(
         "-q",
