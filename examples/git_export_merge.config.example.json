@@ -1,0 +1,18 @@
+{
+  "_comment": "示例配置。请将 commits 改为你的 rev。相对路径 repo/output 相对于本文件所在目录（examples/）解析：repo 为 .. 表示项目根目录。",
+  "repo": "..",
+  "commits": [
+    "HEAD~1",
+    "HEAD"
+  ],
+  "output": "../dist/export-example",
+  "tag_min_len": 7,
+  "tag_max_len": 12,
+  "manifest": "_导出说明",
+  "no_json_manifest": false,
+  "dry_run": true,
+  "skip_non_blob": false,
+  "progress_every": 5000,
+  "verbose": 0,
+  "quiet": false
+}
